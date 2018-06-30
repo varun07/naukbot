@@ -29,6 +29,14 @@ app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 // Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {  
 
+  // Check if the event is a message or postback and
+  // pass the event to the appropriate handler function
+  // if (webhook_event.message) {
+  //   handleMessage(sender_psid, webhook_event.message);
+  // } else if (webhook_event.postback) {
+  //   handlePostback(sender_psid, webhook_event.postback);
+  // }
+
   // Parse the request body from the POST
   let body = req.body;
 
@@ -49,8 +57,10 @@ app.post('/webhook', (req, res) => {
     res.status(200).send('EVENT_RECEIVED');
 
   } else {
+    res.send("Subscribe please");
+    res.end();
     // Return a '404 Not Found' if event is not from a page subscription
-    res.sendStatus(404);
+    // res.sendStatus(404);
   }
 
 });
