@@ -210,7 +210,7 @@ function callSendAPI(sender_psid, response) {
     "recipient": {
       "id": sender_psid
     },
-    "message": response[0]['payload']
+    "message": response
   }
 
   // Send the HTTP request to the Messenger Platform
@@ -240,18 +240,18 @@ function handleMessage(sender_psid, received_message) {
   // Check if the message contains text
   if (received_message) {
 
-    //   // Create the payload for a basic text message
-    //   response = {
-    //     "text": received_message
-    //   }
-    // }
-    // console.log('handleMessage', response);
-    callSendAPI(sender_psid, received_message);
-
-    // Sends the response message
-
+    // Create the payload for a basic text message
+    response = {
+      "text": received_message
+    }
   }
+  console.log('handleMessage', response);
+  callSendAPI(sender_psid, response);
+
+  // Sends the response message
+
 }
+
 function handlePostback(sender_psid, received_postback) {
   let response;
 
