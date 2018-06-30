@@ -59,7 +59,8 @@ app.post('/webhook', (req, res) => {
 app.get('/webhook', (req, res) => {
   
   /** UPDATE YOUR VERIFY TOKEN **/
-  const VERIFY_TOKEN = "<YOUR_VERIFY_TOKEN>";
+  res.send(process.env.PAGE_ACCESS_TOKEN);res.end();
+  const VERIFY_TOKEN = process.env.PAGE_ACCESS_TOKEN || "EAALoGfqGpHoBAElZBYsj9bjjeDGzKUgNIwDM1p6QMGCz4Hzw2S2kCJKc6VqYxfSdCUDRVjsFIYGxt7gQ61ZCHQUo5N5r0tCVZAvIM3XauJfGfRGbpaqAvB9ZBV7WRIz3NQFZB4yDqoBha2jMmjNe0NMKe0K335RzONOKy3CrXwgZDZD"
   
   // Parse params from the webhook verification request
   let mode = req.query['hub.mode'];
@@ -81,4 +82,14 @@ app.get('/webhook', (req, res) => {
       res.sendStatus(403);      
     }
   }
+});
+
+app.get('/varun', (req, res) => {
+  
+  /** UPDATE YOUR VERIFY TOKEN **/
+  res.send({
+    name: 'varun'
+  });
+
+  res.end();
 });
