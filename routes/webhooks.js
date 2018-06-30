@@ -134,7 +134,7 @@ function showWalkinList(senderId, walkins){
                 ],
                 "default_action": {
                     "type": "web_url",
-                    "url": "https://naukbot.herokuapp.com/app/1",
+                    "url": "https://naukbot.herokuapp.com/app?id=1",
                     "messenger_extensions": false,
                     "webview_height_ratio": "tall"
                 }
@@ -151,7 +151,7 @@ function showWalkinList(senderId, walkins){
                 ],
                 "default_action": {
                     "type": "web_url",
-                    "url": "https://naukbot.herokuapp.com/app/1",
+                    "url": "https://naukbot.herokuapp.com/app?id=1",
                     "messenger_extensions": false,
                     "webview_height_ratio": "tall"
                 }
