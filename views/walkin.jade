@@ -3,6 +3,6 @@ extends layout
 block content
   h1= walkin.title
   h2= walkin.organization
-  span Salary <strong>"#{salary.minimum}" -  "#{salary.maximum}" "#{salary.unit}"</strong>
-  span Time <strong>"#{time.from}" -  "#{time.to}" on "#{time.date}"</strong>
+  span Salary <strong>"#{walkin.salary.minimum}" -  "#{walkin.salary.maximum}" "#{walkin.salary.unit}"</strong>
+  span Time <strong>"#{walkin.time.from}" -  "#{walkin.time.to}" on "#{walkin.time.date}"</strong>
 
