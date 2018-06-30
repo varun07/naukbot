@@ -49,7 +49,7 @@ app.post('/webhook', (req, res) => {
           handleMessage(sender_psid, result);       
         });
       
-        request.on('error', (error) => console.log(error) );
+        request.on('error', (error) => console.log('errror', error));
         request.end();
          
       } 
