@@ -5,13 +5,15 @@ var allWalkins = require('../walkins');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   console.log("params", req.params);
-  console.log("params", req.query);
-  const walkin = allWalkins.filter((walkin) => walkin.id.toString() === req.query['id']);
-  if(walkin.length !== 0) {
+  console.log("query", req.query);
+  console.log(allWalkins);
+  const walkins = allWalkins.filter((walkin) => walkin.id.toString() === req.query['id']);
+  console.log(walkins);
+  if(walkins.length !== 0) {
     res.render('walkin', 
     { 
       title: 'Express',
-      walkin: walkin[0]
+      walkin: walkins[0]
     });
   }
   else {
