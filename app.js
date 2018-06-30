@@ -1,84 +1,280 @@
-/**
- * Copyright 2017-present, Facebook, Inc. All rights reserved.
- *
- * This source code is licensed under the license found in the
- * LICENSE file in the root directory of this source tree.
- *
- *
- * Starter Project for Messenger Platform Quick Start Tutorial
- *
- * Use this project as the starting point for following the 
- * Messenger Platform quick start tutorial.
- *
- * https://developers.facebook.com/docs/messenger-platform/getting-started/quick-start/
- *
- */
+
 
 'use strict';
 
-// Imports dependencies and set up http server
-const 
+var apiai = require('apiai');
+var apiaiRequest = apiai("f4e49ed51bdd4128b4dbd4f23ad973b5");
+const uuidv1 = require('uuid/v1');
+
+const
   request = require('request'),
   express = require('express'),
   body_parser = require('body-parser'),
   app = express().use(body_parser.json()); // creates express http server
 
+
+const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
+const INTENTS = {
+  WALKIN: ''
+};
+
 // Accepts POST requests at /webhook endpoint
-app.post('/webhook', (req, res) => {  
+app.post('/webhook', (req, res) => {
 
-  // Parse the request body from the POST
   let body = req.body;
-
-  // Check the webhook event is from a Page subscription
   if (body.object === 'page') {
-
-    // Iterate over each entry - there may be multiple if batched
-    body.entry.forEach(function(entry) {
-
-      // Get the webhook event. entry.messaging is an array, but 
-      // will only ever contain one event, so we get index 0
+    body.entry.forEach(function (entry) {
       let webhook_event = entry.messaging[0];
-      console.log(webhook_event);
-      
+
+      let sender_psid = webhook_event.sender.id;
+      console.log('Sender PSID: ' + sender_psid);
+
+      if (webhook_event.message) {
+
+        sendTypingOn(sender_psid);
+        var request = apiaiRequest.textRequest(webhook_event.message.text, { sessionId: uuidv1() });
+        console.log("Sent api ai request as ", request);
+        console.log('\n');
+        request.on('response', function (response) {
+          console.log('apiai response successful');
+          console.log('response', response);
+          console.log("//////////////////////")
+          const result = response.result.fulfillment.speech;
+
+          handleMessage(sender_psid, result);
+          return;
+          showWalkinList(sender_psid, getWalkIn());
+          return;
+          // if(response.result.intent === INTENTS.WALKIN){
+          //   showWalkinList(getWalkIn());
+          //   return;
+          // }
+          //handleMessage(sender_psid, result);       
+        });
+
+        request.on('error', (error) => console.log('errror', error));
+        request.end();
+
+      }
+      else if (webhook_event.postback) {
+        handlePostback(sender_psid, webhook_event.postback);
+      }
+
     });
 
-    // Return a '200 OK' response to all events
     res.status(200).send('EVENT_RECEIVED');
 
   } else {
-    // Return a '404 Not Found' if event is not from a page subscription
-    res.sendStatus(404);
+    res.send("Subscribe please");
+    res.end();
   }
 
 });
 
-// Accepts GET requests at the /webhook endpoint
+function showWalkinList(senderId, walkins) {
+
+  let elements = walkins.map((walkin) => {
+    return {
+      title: walkin.organization,
+      subtitle: walkin.jobTitle,
+      "buttons": [
+        {
+          "title": "Interested",
+          "type": "web_url",
+          "url": "https://peterssendreceiveapp.ngrok.io/collection",
+          "messenger_extensions": true,
+        }
+      ],
+      "default_action": {
+        "type": "web_url",
+        "url": "https://peterssendreceiveapp.ngrok.io/view?item=100",
+        "messenger_extensions": false,
+      }
+    }
+  });
+
+  let responseBody = {
+
+    "recipient": {
+      "id": senderId
+    },
+    "message": {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "list",
+          "top_element_style": "compact",
+          "elements": elements
+        }
+      }
+    }
+  };
+
+  responseBody = {
+    "recipient": {
+      "id": senderId
+    },
+    "message": {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "list",
+          "top_element_style": "compact",
+          "elements": [
+            {
+              "title": "Software Engineer",
+              "subtitle": "InfoEdge India Limited",
+              "buttons": [
+                {
+                  "type": "web_url",
+                  "url": "https://www.messenger.com",
+                  "title": "Interested"
+                },
+              ]
+            },
+            {
+              "title": "Software Engineer",
+              "subtitle": "InfoEdge India Limited"
+            }
+          ]
+        }
+      }
+    }
+  };
+
+
+  console.log('showWalkinList - end');
+  sendToFacebook(responseBody);
+}
+
 app.get('/webhook', (req, res) => {
-  
-  /** UPDATE YOUR VERIFY TOKEN **/
-  const VERIFY_TOKEN = "<YOUR_VERIFY_TOKEN>";
-  
-  // Parse params from the webhook verification request
+
+  const VERIFY_TOKEN = PAGE_ACCESS_TOKEN;
+
   let mode = req.query['hub.mode'];
   let token = req.query['hub.verify_token'];
   let challenge = req.query['hub.challenge'];
-    
-  // Check if a token and mode were sent
+
   if (mode && token) {
-  
-    // Check the mode and token sent are correct
+
     if (mode === 'subscribe' && token === VERIFY_TOKEN) {
-      
-      // Respond with 200 OK and challenge token from the request
       console.log('WEBHOOK_VERIFIED');
       res.status(200).send(challenge);
-    
-    } else {
-      // Responds with '403 Forbidden' if verify tokens do not match
-      res.sendStatus(403);      
+
+    }
+    else {
+      res.sendStatus(403);
     }
   }
 });
+
+app.get('/test', (req, res) => {
+
+  res.send({
+    name: 'successful request'
+  });
+
+  res.end();
+});
+
+app.get('/walkin', (req, res) => {
+  res.send('walkin');
+  res.end();
+
+  res.send(getWalkIn());
+  res.end();
+});
+
+function getWalkIn() {
+  return [
+    {
+      jobTitle: 'Software Engineer',
+      organization: 'InfoEdge India Limited',
+      location: 'Noida B-8'
+    },
+    {
+      jobTitle: 'Software Engineer',
+      organization: 'InfoEdge India Limited',
+      location: 'Noida B-8'
+    }
+  ];
+}
+
+function callSendAPI(sender_psid, response) {
+  // Construct the message body
+  let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": response
+  }
+
+  // Send the HTTP request to the Messenger Platform
+  sendToFacebook(request_body);
+}
+
+function sendToFacebook(request_body) {
+  console.log(request_body);
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "qs": { "access_token": PAGE_ACCESS_TOKEN },
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (!err) {
+      console.log('message sent!')
+    } else {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
+function handleMessage(sender_psid, received_message) {
+
+  let response;
+
+  // Check if the message contains text
+  if (received_message) {
+
+    // Create the payload for a basic text message
+    response = {
+      "text": received_message
+    }
+  }
+  console.log('handleMessage', response);
+  callSendAPI(sender_psid, response);
+
+  // Sends the response message
+
+}
+
+function handlePostback(sender_psid, received_postback) {
+  let response;
+
+  // Get the payload for the postback
+  let payload = received_postback.payload;
+
+  // Set the response based on the postback payload
+  if (payload === 'yes') {
+    response = { "text": "Thanks!" }
+  } else if (payload === 'no') {
+    response = { "text": "Oops, try sending another image." }
+  }
+  // Send the message to acknowledge the postback
+  callSendAPI(sender_psid, response);
+}
+
+function sendTypingOn(senderId) {
+  const requestBody = {
+    "recipient": {
+      "id": senderId
+    },
+    "sender_action": "typing_on"
+  };
+
+  sendToFacebook(requestBody);
+}
