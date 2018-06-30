@@ -6,12 +6,21 @@ var allWalkins = require('../walkins');
 router.get('/', function(req, res, next) {
   console.log("params", req.params);
   console.log("params", req.query);
-  allWalkins.filter((walkin) => walkin.id.toString() === req.query['id']);
-  res.render('index', 
+  const walkin = allWalkins.filter((walkin) => walkin.id.toString() === req.query['id']);
+  if(walkin.length !== 0) {
+    res.render('walkin', 
     { 
       title: 'Express',
-      walkin: (allWalkins.length || {}) && allWalkins[0]
+      walkin: walkin[0]
     });
+  }
+  else {
+    res.render('index', 
+    { 
+      title: 'Index page of the application'
+    });
+  }
+  
 });
 
 module.exports = router;
