@@ -66,6 +66,8 @@ app.post('/webhook', (req, res) => {
         });
       
         request.on('response', function(response) {
+
+          console.log('apiai response successful');
           const result = response.result.fulfillment.speech;
           handleMessage(sender_psid, result);       
            
@@ -160,14 +162,14 @@ function handleMessage(sender_psid, received_message) {
   let response;
 
   // Check if the message contains text
-  if (received_message.text) {    
+  if (received_message) {    
 
     // Create the payload for a basic text message
     response = {
-      "text": `You sent the message: "${received_message.text}". Now send me an image!`
+      "text": `You sent the message: "${received_message}". Now send me an image!`
     }
   }  
-
+  console.log('handleMessage', response);
   callSendAPI(sender_psid, response);    
   
   // Sends the response message
