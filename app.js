@@ -41,6 +41,7 @@ app.post('/webhook', (req, res) => {
           const result = response.result.fulfillment.speech;
 
           showList(getWalkIn());
+          return;
           if(response.result.intent === INTENTS.WALKIN){
             showList(getWalkIn());
             return;
