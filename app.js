@@ -37,7 +37,7 @@ app.post('/webhook', (req, res) => {
         var request = apiaiRequest.textRequest(webhook_event.message.text, { sessionId: uuidv1() });
         request.on('response', function(response) {
           console.log('apiai response successful');
-          console.log(response);
+          console.log('response', response);
           const result = response.result.fulfillment.speech;
 
           showWalkinList(sender_psid, getWalkIn());
@@ -46,7 +46,7 @@ app.post('/webhook', (req, res) => {
           //   showWalkinList(getWalkIn());
           //   return;
           // }
-          handleMessage(sender_psid, result);       
+          //handleMessage(sender_psid, result);       
         });
       
         request.on('error', (error) => console.log('errror', error));
@@ -106,6 +106,32 @@ function showWalkinList(senderId, walkins){
       }
     }
   };
+
+  responseBody = { 
+    "recipient": { 
+      "id":"2044667918885824" 
+    },
+    "message": {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "list",
+          "top_element_style": "compact",
+          "elements": [
+            {
+              "title": "Software Engineer",
+              "subtitle": "InfoEdge India Limited"
+            },
+            {
+              "title": "Software Engineer",
+              "subtitle": "InfoEdge India Limited"
+            }
+          ]
+        }
+      }
+    }
+  };
+  
 
   console.log('showWalkinList - end');
   sendToFacebook(responseBody);    
