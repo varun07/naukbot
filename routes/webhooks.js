@@ -42,8 +42,8 @@ router.post('/', (req, res) => {
           console.log('response', response);
           const result = response.result.fulfillment.speech;
 
-          handleMessage(sender_psid, result);
-          return;
+        //   handleMessage(sender_psid, result);
+        //   return;
           showWalkinList(sender_psid, getWalkIn());
           return;
           // if(response.result.intent === INTENTS.WALKIN){
@@ -123,19 +123,38 @@ function showWalkinList(senderId, walkins){
           "top_element_style": "compact",
           "elements": [
             {
-              "title": "Software Engineer",
-              "subtitle": "InfoEdge India Limited",
-              "buttons":[
-                {
-                  "type":"web_url",
-                  "url":"https://www.messenger.com",
-                  "title":"Interested"
-                },
-              ]
+                "title": "Software Engineer",
+                "subtitle": "InfoEdge India Limited",
+                "buttons":[
+                    {
+                    "type":"web_url",
+                    "url":"https://www.messenger.com",
+                    "title":"Interested"
+                    }
+                ],
+                "default_action": {
+                    "type": "web_url",
+                    "url": "https://naukbot.herokuapp.com/app/1",
+                    "messenger_extensions": false,
+                    "webview_height_ratio": "tall"
+                }
             },
             {
-              "title": "Software Engineer",
-              "subtitle": "InfoEdge India Limited"
+                "title": "Senior Software Engineer",
+                "subtitle": "Adobe India Limited",
+                "buttons":[
+                    {
+                    "type":"web_url",
+                    "url":"https://www.messenger.com",
+                    "title":"Interested"
+                    }
+                ],
+                "default_action": {
+                    "type": "web_url",
+                    "url": "https://naukbot.herokuapp.com/app/1",
+                    "messenger_extensions": false,
+                    "webview_height_ratio": "tall"
+                }
             }
           ]
         }
