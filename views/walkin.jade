@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1 ROLE:
+  div= walkin.title
+  h2 CITY
+  div= walkin.city
+  h2 SALARY: 
+  div <strong>#{walkin.salary.minimum} -  #{walkin.salary.maximum} #{walkin.salary.unit}</strong>
+  h2 TIME: 
+  div <strong>#{walkin.time.from} -  #{walkin.time.to} on #{walkin.time.date}</strong>
+
+  button.col-sm-12.col-md-12.col-lg-12.btn.btn-primary LOCATE
+
