@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
   if(walkins.length !== 0) {
     res.render('walkin', 
     { 
-      title: 'Express',
+      title: walkins[0].organization.toUpperCase(),
       walkin: walkins[0]
     });
   }
