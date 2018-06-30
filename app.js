@@ -43,7 +43,7 @@ app.post('/webhook', (req, res) => {
           console.log('apiai response successful');
           console.log('response', response);
           console.log("//////////////////////")
-          const result = response.result.fulfillment.messages;
+          const result = response.result.fulfillment.speech;
 
           handleMessage(sender_psid, result);
           return;
