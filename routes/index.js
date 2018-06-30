@@ -5,7 +5,8 @@ var allWalkins = require('../walkins');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   console.log("params", req.params);
-  allWalkins.filter((walkin) => walkin.id.toString() === req.params['id']);
+  console.log("params", req.query);
+  allWalkins.filter((walkin) => walkin.id.toString() === req.query['id']);
   res.render('index', 
     { 
       title: 'Express',
