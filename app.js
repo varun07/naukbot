@@ -43,7 +43,7 @@ app.post('/webhook', (req, res) => {
           console.log('apiai response successful');
           console.log('response', response);
           console.log("//////////////////////")
-          const result = response.result.fulfillment.speech;
+          const result = response.result.fulfillment.messages;
 
           handleMessage(sender_psid, result);
           return;
@@ -240,41 +240,41 @@ function handleMessage(sender_psid, received_message) {
   // Check if the message contains text
   if (received_message) {
 
-    // Create the payload for a basic text message
-    response = {
-      "text": received_message
+    //   // Create the payload for a basic text message
+    //   response = {
+    //     "text": received_message
+    //   }
+    // }
+    // console.log('handleMessage', response);
+    callSendAPI(sender_psid, received_message);
+
+    // Sends the response message
+
+  }
+
+  function handlePostback(sender_psid, received_postback) {
+    let response;
+
+    // Get the payload for the postback
+    let payload = received_postback.payload;
+
+    // Set the response based on the postback payload
+    if (payload === 'yes') {
+      response = { "text": "Thanks!" }
+    } else if (payload === 'no') {
+      response = { "text": "Oops, try sending another image." }
     }
+    // Send the message to acknowledge the postback
+    callSendAPI(sender_psid, response);
   }
-  console.log('handleMessage', response);
-  callSendAPI(sender_psid, response);
 
-  // Sends the response message
+  function sendTypingOn(senderId) {
+    const requestBody = {
+      "recipient": {
+        "id": senderId
+      },
+      "sender_action": "typing_on"
+    };
 
-}
-
-function handlePostback(sender_psid, received_postback) {
-  let response;
-
-  // Get the payload for the postback
-  let payload = received_postback.payload;
-
-  // Set the response based on the postback payload
-  if (payload === 'yes') {
-    response = { "text": "Thanks!" }
-  } else if (payload === 'no') {
-    response = { "text": "Oops, try sending another image." }
+    sendToFacebook(requestBody);
   }
-  // Send the message to acknowledge the postback
-  callSendAPI(sender_psid, response);
-}
-
-function sendTypingOn(senderId) {
-  const requestBody = {
-    "recipient": {
-      "id": senderId
-    },
-    "sender_action": "typing_on"
-  };
-
-  sendToFacebook(requestBody);
-}
