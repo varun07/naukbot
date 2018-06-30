@@ -111,7 +111,7 @@ function showWalkinList(senderId, walkins){
 
   responseBody = { 
     "recipient": { 
-      "id": senderId
+      "id":"2044667918885824" 
     },
     "message": {
       "attachment": {
@@ -129,30 +129,11 @@ function showWalkinList(senderId, walkins){
                   "url":"https://www.messenger.com",
                   "title":"Interested"
                 },
-                {
-                  "type":"web_url",
-                  "url":"https://www.messenger.com",
-                  "title":"Not Interested"
-                },
-
               ]
             },
             {
               "title": "Software Engineer",
-              "subtitle": "InfoEdge India Limited",
-              "buttons":[
-                {
-                  "type":"web_url",
-                  "url":"https://www.messenger.com",
-                  "title":"Interested"
-                },
-                {
-                  "type":"web_url",
-                  "url":"https://www.messenger.com",
-                  "title":"Not Interested"
-                },
-
-              ]
+              "subtitle": "InfoEdge India Limited"
             }
           ]
         }
