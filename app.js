@@ -111,7 +111,7 @@ function showWalkinList(senderId, walkins){
 
   responseBody = { 
     "recipient": { 
-      "id": senderId 
+      "id": senderId
     },
     "message": {
       "attachment": {
@@ -130,9 +130,9 @@ function showWalkinList(senderId, walkins){
                   "title":"Interested"
                 },
                 {
-                  "type": "element_share",
+                  "type":"web_url",
                   "url":"https://www.messenger.com",
-                  "title":"Share"
+                  "title":"Not Interested"
                 },
 
               ]
@@ -147,9 +147,9 @@ function showWalkinList(senderId, walkins){
                   "title":"Interested"
                 },
                 {
-                  "type":"element_share",
+                  "type":"web_url",
                   "url":"https://www.messenger.com",
-                  "title":"Share"
+                  "title":"Not Interested"
                 },
 
               ]
