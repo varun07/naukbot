@@ -40,12 +40,12 @@ app.post('/webhook', (req, res) => {
           console.log(response);
           const result = response.result.fulfillment.speech;
 
-          showWalkinList(sender_psid, getWalkIn());
-          return;
-          if(response.result.intent === INTENTS.WALKIN){
-            showWalkinList(getWalkIn());
-            return;
-          }
+          // showWalkinList(sender_psid, getWalkIn());
+          // return;
+          // if(response.result.intent === INTENTS.WALKIN){
+          //   showWalkinList(getWalkIn());
+          //   return;
+          // }
           handleMessage(sender_psid, result);       
         });
       
