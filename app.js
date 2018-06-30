@@ -34,6 +34,8 @@ app.post('/webhook', (req, res) => {
       console.log('Sender PSID: ' + sender_psid);
 
       if (webhook_event.message) {
+
+        sendTypingOn(sender_psid);
         var request = apiaiRequest.textRequest(webhook_event.message.text, { sessionId: uuidv1() });
         request.on('response', function(response) {
           console.log('apiai response successful');
@@ -120,7 +122,14 @@ function showWalkinList(senderId, walkins){
           "elements": [
             {
               "title": "Software Engineer",
-              "subtitle": "InfoEdge India Limited"
+              "subtitle": "InfoEdge India Limited",
+              "buttons":[
+                {
+                  "type":"web_url",
+                  "url":"https://www.messenger.com",
+                  "title":"Interested"
+                },
+              ]
             },
             {
               "title": "Software Engineer",
@@ -252,4 +261,15 @@ function handlePostback(sender_psid, received_postback) {
   }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
+}
+
+function sendTypingOn(senderId){
+  const requestBody = {
+    "recipient":{
+      "id": senderId
+    },
+    "sender_action":"typing_on"
+  };
+
+  sendToFacebook(requestBody);
 }
