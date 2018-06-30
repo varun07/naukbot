@@ -40,7 +40,7 @@ app.post('/webhook', (req, res) => {
           console.log(response);
           const result = response.result.fulfillment.speech;
 
-          showWalkinList(getWalkIn());
+          showWalkinList(sender_psid, getWalkIn());
           return;
           if(response.result.intent === INTENTS.WALKIN){
             showWalkinList(getWalkIn());
@@ -101,14 +101,7 @@ function showWalkinList(senderId, walkins){
         "payload": {
           "template_type": "list",
           "top_element_style": "compact",
-          "elements": elements,
-          "buttons": [
-            {
-              "title": "View More",
-              "type": "postback",
-              "payload": "payload"            
-            }
-          ]  
+          "elements": elements
         }
       }
     }
