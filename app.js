@@ -40,8 +40,8 @@ app.post('/webhook', (req, res) => {
           console.log(response);
           const result = response.result.fulfillment.speech;
 
-          // showWalkinList(sender_psid, getWalkIn());
-          // return;
+          showWalkinList(sender_psid, getWalkIn());
+          return;
           // if(response.result.intent === INTENTS.WALKIN){
           //   showWalkinList(getWalkIn());
           //   return;
@@ -149,8 +149,7 @@ app.get('/walkin', (req, res) => {
 });
 
 function getWalkIn(){
-  return 
-  [
+  return [
     {
       jobTitle: 'Software Engineer',
       organization: 'InfoEdge India Limited',
@@ -161,7 +160,7 @@ function getWalkIn(){
       organization: 'InfoEdge India Limited',
       location: 'Noida B-8'
     }
-  ]
+  ];
 }
 
 function callSendAPI(sender_psid, response) {
