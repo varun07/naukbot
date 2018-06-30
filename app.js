@@ -17,6 +17,12 @@
 'use strict';
 
 // Imports dependencies and set up http server
+
+var apiai = require('apiai');
+
+var apiaiRequest = apiai("f4e49ed51bdd4128b4dbd4f23ad973b5");
+const uuidv1 = require('uuid/v1');
+
 const 
   request = require('request'),
   express = require('express'),
@@ -54,7 +60,21 @@ app.post('/webhook', (req, res) => {
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        handleMessage(sender_psid, webhook_event.message);        
+
+        var request = apiaiRequest.textRequest(webhook_event.message, {
+            sessionId: uuidv1()
+        });
+      
+        request.on('response', function(response) {
+          const result = response.result.fulfillment.speech;
+          handleMessage(sender_psid, result);       
+           
+          console.log(response);
+        });
+      
+        request.on('error', (error) => console.log(error) );
+        request.end();
+         
       } else if (webhook_event.postback) {
         handlePostback(sender_psid, webhook_event.postback);
       }
@@ -147,9 +167,11 @@ function handleMessage(sender_psid, received_message) {
       "text": `You sent the message: "${received_message.text}". Now send me an image!`
     }
   }  
+
+  callSendAPI(sender_psid, response);    
   
   // Sends the response message
-  callSendAPI(sender_psid, response);    
+  
 }
 
 function handlePostback(sender_psid, received_postback) {
