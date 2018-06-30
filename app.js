@@ -42,6 +42,8 @@ app.post('/webhook', (req, res) => {
           console.log('response', response);
           const result = response.result.fulfillment.speech;
 
+          handleMessage(sender_psid, result);
+          return;
           showWalkinList(sender_psid, getWalkIn());
           return;
           // if(response.result.intent === INTENTS.WALKIN){
