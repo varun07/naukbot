@@ -61,7 +61,7 @@ app.post('/webhook', (req, res) => {
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
 
-        var request = apiaiRequest.textRequest(webhook_event.message, {
+        var request = apiaiRequest.textRequest(webhook_event.message.text, {
             sessionId: uuidv1()
         });
       
