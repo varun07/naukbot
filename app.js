@@ -107,6 +107,7 @@ function showWalkinList(senderId, walkins){
     }
   };
 
+  console.log('showWalkinList - end');
   sendToFacebook(responseBody);    
 }
 
