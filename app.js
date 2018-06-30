@@ -129,11 +129,30 @@ function showWalkinList(senderId, walkins){
                   "url":"https://www.messenger.com",
                   "title":"Interested"
                 },
+                {
+                  "type": "element_share",
+                  "url":"https://www.messenger.com",
+                  "title":"Share"
+                },
+
               ]
             },
             {
               "title": "Software Engineer",
-              "subtitle": "InfoEdge India Limited"
+              "subtitle": "InfoEdge India Limited",
+              "buttons":[
+                {
+                  "type":"web_url",
+                  "url":"https://www.messenger.com",
+                  "title":"Interested"
+                },
+                {
+                  "type":"element_share",
+                  "url":"https://www.messenger.com",
+                  "title":"Share"
+                },
+
+              ]
             }
           ]
         }
